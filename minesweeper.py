@@ -1,6 +1,5 @@
 import numpy as np
 import random
-import kivy
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
@@ -11,7 +10,7 @@ from kivymd.utils import asynckivy
 
 
 class Board():
-    def __init__(self):# הפעולה יוצרת לוח של אפסים עם המידות הנתונות ומוסיפה לו מסגרת
+    def __init__(self):
         self.row = 5
         self.cul = 10
         self.board = np.zeros((self.row+2, self.cul+2), dtype=int)
@@ -19,7 +18,7 @@ class Board():
         self.board[self.row+1, :] = 10
         self.board[:, 0] = 10
         self.board[:, self.cul+1] = 10
-    def create_bombs(self):# הפעולה מגרילה מיקומי פצצות עבור הלוח ומעדכנת מספר 9 בלוח עבור פצצה
+    def create_bombs(self):
         self.num_bombs = (self.row*self.cul)//10
         self.bombs = []
         for i in range(self.num_bombs):
@@ -32,7 +31,7 @@ class Board():
                 bomb_tuple = (random_row, random_cul)
             self.bombs.append(bomb_tuple)
             self.board[random_row][random_cul] = 9
-    def neighbors(self):# הפעולה מעדכנת מספר פצצות שכנות עבור כל מיקום בלוח
+    def neighbors(self):
         counter = 0
         for i in range(1, self.row+1):
             for j in range(1,self.cul+1):
@@ -44,7 +43,7 @@ class Board():
                                     counter+=1
                     self.board[i][j] = counter
                     counter = 0
-    def change_board(self):# הפעולה מוחקת את המסגרת של הלוח
+    def change_board(self):
         self.board = np.delete(self.board, 0 , axis=0)
         self.board = np.delete(self.board, self.row , axis=0)
         self.board = np.delete(self.board, 0 , axis=1)
@@ -54,7 +53,7 @@ class Board():
 
 class Grafic_Board(App):
 
-    def build(self):# הפעולה בונה לוח גרפי עם כפתורים בגודל הלוח הנתון ושומרת את ההפניות לכפתורים
+    def build(self):
         b1 = Board()
         b1.create_bombs()
         b1.neighbors()
@@ -68,7 +67,7 @@ class Grafic_Board(App):
         self.layout = GridLayout(cols=self.num_cul)
         for i in range(self.num_row):
             for j in range(self.num_cul):
-                button = Button(background_normal='background.jpg', font_size=1)
+                button = Button(background_normal='GUI_images/background.jpg', font_size=1)
                 button.bind(on_press=self.change_pic)
                 button.pos_hint = {'center_x': (i), 'center_y': (j)}
                 self.layout.add_widget(button)
@@ -76,7 +75,7 @@ class Grafic_Board(App):
         self.buttons = [self.buttons[i:i + self.num_cul] for i in range(0, len(self.buttons), self.num_cul)]
         return self.layout
 
-    def change_pic(self, instance):#  הפעולה בודקת האם הכפתור הנלחץ הוא פצצה, מספר חיובי או 0 ומזמנת את הפעולה המתאימה בהתאם לכפתור שנלחץ. לבסוף הפעולה בודקת האם השחקן ניצח
+    def change_pic(self, instance):
         self.row = instance.pos_hint['center_x']
         self.cul = instance.pos_hint['center_y']
         if self.board[self.row][self.cul] == 9:
@@ -89,21 +88,21 @@ class Grafic_Board(App):
         self.check_win()
 
 
-    def show_bombs(self):# הפעולה חושפת את כל הפצצות בלוח
+    def show_bombs(self):
         for i in range(self.num_row):
             for j in range(self.num_cul):
                 if(self.board[i][j] == 9):
-                    self.buttons[i][j].background_normal = 'bomb.jpg'
+                    self.buttons[i][j].background_normal = 'GUI_images/bomb.jpg'
 
 
-    def reveal_pos(self):# הפעולה חושפת את המספר של הכפתור שנלחץ בלוח
+    def reveal_pos(self):
         num = self.board[self.row][self.cul]
-        self.buttons[self.row][self.cul].background_normal = f'number_{num}.jpg'
+        self.buttons[self.row][self.cul].background_normal = f'GUI_images/number_{num}.jpg'
         self.win_board[self.row][self.cul] = -1
 
 
-    def reveal_all_zeros(self, row, cul):# הפעולה חושפת את כל התאים החיוביים מכל צדדיו של הכפתור
-        self.buttons[row][cul].background_normal = f'number_0.jpg'
+    def reveal_all_zeros(self, row, cul):
+        self.buttons[row][cul].background_normal = f'GUI_images/number_0.jpg'
         self.win_board[row][cul] = -1
         tuple = (row, cul)
         self.revealed_zeros.append(tuple)
@@ -114,11 +113,11 @@ class Grafic_Board(App):
                         self.reveal_all_zeros(i, j)
                     else:
                         num = self.board[i][j]
-                        self.buttons[i][j].background_normal = f'number_{num}.jpg'
+                        self.buttons[i][j].background_normal = f'GUI_images/number_{num}.jpg'
                         self.win_board[i][j] = -1
 
 
-    def check_win(self):# הפעולה בודקת אם השחקן ניצח ואם כן מדפיסה הודעת ניצחון
+    def check_win(self):
         async def check_win():
             bool = True
             for i in range(self.num_row):
@@ -134,7 +133,7 @@ class Grafic_Board(App):
                 Window.close()
         asynckivy.start(check_win())
 
-    def lose_massage(self):# הפעולה מדפיסה הודעת הפסד
+    def lose_massage(self):
         async def lose_massage():
             await asynckivy.sleep(3)
             self.layout.clear_widgets()
