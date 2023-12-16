@@ -18,7 +18,7 @@ with this board.
 2. You will see a board with blank squares, press one of them to begin
 playing.
 <p align="center">
-  <img src="images/game_board.jpg" alt="Output">
+  <img src="images/game_board.JPG" alt="Output">
 </p>
 
 3. You need to press only the squares you think there is no bomb at. Unlike 
@@ -30,12 +30,12 @@ neighbors will be revealed. If you press on a square that has bomb neighbors,
 the number of bomb neighbors it has will be revealed. 
 
 <p align="center">
-  <img src="images/bomb_press.jpg" alt="Output">
+  <img src="images/bomb_press.JPG" alt="Output">
 </p>
 5. You will win after you pressed on all the squares without bomb.
 
 <p align="center">
-  <img src="images/win_board.jpg" alt="Output">
+  <img src="images/win_board.JPG" alt="Output">
 </p>
 
 
