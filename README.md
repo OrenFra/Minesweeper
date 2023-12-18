@@ -13,7 +13,7 @@ with this board.
 
 
 ## Usage
-1. run "minesweeper.py" file.
+1. Run "minesweeper.py" file.
 
 2. You will see a board with blank squares, press one of them to begin
 playing.
